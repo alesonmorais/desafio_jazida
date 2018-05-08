@@ -1,0 +1,306 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "Desafio Jazida",
+    "description": "Sistema de Cadastro e Batalhas Pokémon",
+    "license": {
+      "name": "MIT",
+      "url": "https://opensource.org/licenses/MIT"
+    }
+  },
+  "host": "localhost:3000",
+  "basePath": "/",
+  "tags": [
+    {
+      "name": "Pokemons",
+      "description": "API para pokémons do sistema"
+    }
+  ],
+  "schemes": [
+    "http"
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/pokemons": {
+      "post": {
+        "tags": [
+          "Pokemons"
+        ],
+        "description": "Criar novo pokémon no sistema",
+        "summary": "Criar um novo pokémon no sistema",
+        "parameters": [
+          {
+            "name": "treinador",
+            "in": "body",
+            "description": "String do nome do treinador pokémon"
+          },{
+            "name": "tipo",
+            "in": "body",
+            "description": "Usado na criação do cadastro do pokémon podem ser as strings \"pikachu\", \"charizard\" ou \"mewtwo\" "
+          },{
+            "name": "uso",
+            "in": "body",
+            "description": "Exemplo de uso de ambos os parâmetros",
+            "schema": {
+              "$ref": "#/definitions/CriarPokemons"
+            }
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Novo pokemon criado",
+            "schema": {
+              "$ref": "#/definitions/RetornoPokemonsCriado"
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Pokemons"
+        ],
+        "summary": "Busca todos os pokémons no sistema",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/ListarTodosPokemons"
+            }
+          }
+        }
+      }
+    },
+    "/pokemons/{id}": {
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "required": true,
+          "description": "Id do pokémon",
+          "type": "integer"
+        }
+      ],
+      "get": {
+        "tags": [
+          "Pokemons"
+        ],
+        "summary": "Buscar pokémon por ID",
+        "responses": {
+          "200": {
+            "description": "Pokémon encontrado",
+            "schema": {
+              "$ref": "#/definitions/BuscarPokemons"
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Deletar pokémon do sistema por ID",
+        "tags": [
+          "Pokemons"
+        ],
+        "responses": {
+          "204": {
+            "description": "Pokémon foi deletado"
+          }
+        }
+      },
+      "put": {
+        "summary": "Atualizar pokémon",
+        "tags": [
+          "Pokemons"
+        ],
+        "parameters": [
+          {
+            "name": "treinador",
+            "in": "body",
+            "description": "Apenas a propiedade treinador pode ser alterada",
+            "schema": {
+              "$ref": "#/definitions/AlterarPokemons"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Pokémon atualizado."
+          }
+        }
+      }
+    },
+    "/batalhar/{pokemonAid}/{pokemonBid}" : {
+      "post": {
+        "tags": [
+          "Batalhar"
+        ],
+        "description": "Batalha entre dois pokémons.",
+        "summary": "Batalha entre dois pokémons.",
+        "parameters": [
+        {
+          "name": "pokemonAid",
+          "in": "path",
+          "required": true,
+          "description": "Id do pokémon A",
+          "type": "integer"
+        },
+        {
+          "name": "pokemonBid",
+          "in": "path",
+          "required": true,
+          "description": "Id do pokémon B",
+          "type": "integer"
+        }
+      ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Resultado da Batalha",
+            "schema": {
+              "$ref": "#/definitions/RetornoBatalhar"
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "CriarPokemons": {
+      "required": [
+        "treinador",
+        "tipo"
+      ],
+      "properties": {
+        "treinador": {
+          "type": "string"
+        },
+        "tipo": {
+          "type": "string"
+        }
+      }
+    },
+    "RetornoPokemonsCriado": {
+      "required": [
+        "id",
+        "treinador",
+        "tipo",
+        "nivel"
+      ],
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "treinador": {
+          "type": "string"
+        },
+        "tipo": {
+          "type": "string"
+        },
+        "nivel": {
+          "type": "integer"
+        }
+      }
+    },
+    "ListarTodosPokemons": {
+      "required": [
+        "id",
+        "treinador",
+        "tipo",
+        "nivel"
+      ],
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "treinador": {
+          "type": "string"
+        },
+        "tipo": {
+          "type": "string"
+        },
+        "nivel": {
+          "type": "integer"
+        }
+      }
+    },
+    "BuscarPokemons": {
+      "required": [
+        "id",
+        "treinador",
+        "tipo",
+        "nivel"
+      ],
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "treinador": {
+          "type": "string"
+        },
+        "tipo": {
+          "type": "string"
+        },
+        "nivel": {
+          "type": "integer"
+        }
+      }
+    },
+    "AlterarPokemons": {
+      "required": [
+        "id",
+        "treinador"
+      ],
+      "properties": {
+        "treinador": {
+          "type": "string"
+        }
+      }
+    },
+    "RetornoBatalhar": {
+      "properties": {
+        "vencedor":{
+           "type":"object",
+           "properties":{
+            "id": {
+              "type": "integer"
+            },
+            "treinador": {
+              "type": "string"
+            },
+            "tipo": {
+              "type": "string"
+            },
+            "nivel": {
+              "type": "integer"
+            }
+          }
+       },"perdedor":{
+           "type":"object",
+           "properties":{
+            "id": {
+              "type": "integer"
+            },
+            "treinador": {
+              "type": "string"
+            },
+            "tipo": {
+              "type": "string"
+            },
+            "nivel": {
+              "type": "integer"
+            }
+          }
+       }
+      }
+    }
+  }
+}

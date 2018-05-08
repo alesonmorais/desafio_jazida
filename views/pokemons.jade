@@ -1,0 +1,8 @@
+extends layout
+block content
+	each u in pokemons
+		li= u.id+' - '+u.treinador+' - '+u.tipo+' - '+u.nivel
+	form(action='/pokemons/1', method='put')
+		input(type='text', name='tipo', autofocus)
+		input(type='text', name='treinador', autofocus)
+		input(type='submit', value='Enviar')
