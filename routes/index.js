@@ -26,39 +26,36 @@ router.post('/batalhar/:pokemonAid/:pokemonBid',function(req, res){
 		if(!result || Object.keys(result).length < 2){
 			return res.status(400).json({});
 		}
-		pokemon_a = result[0].dataValues;
+		pokemon_a = result[0].dataValues; 
 		pokemon_b = result[1].dataValues;
 		var json_sort = {};
-		if(pokemon_a.nivel > pokemon_b.nivel){
-			json_sort[0] = {id:id_a};
-			json_sort[1] = {id:id_a};
-			json_sort[2] = {id:id_b};
-		}else if(pokemon_b.nivel > pokemon_a.nivel){
-			json_sort[0] = {id:id_b};
-			json_sort[1] = {id:id_b};
-			json_sort[2] = {id:id_a};
-		}else{
-			json_sort[0] = {id:id_b};
-			json_sort[1] = {id:id_a};
+		/* nivel 4 */
+		for (var i = 0; i < pokemon_a.nivel; i++) {
+			json_sort[i] = {id:pokemon_a.id};
+			if((i+1) == pokemon_a.nivel){
+				for (var j = (i+1); j < (pokemon_a.nivel+ pokemon_b.nivel); j++) {
+					json_sort[j] = {id:pokemon_b.id};
+				}
+			}
 		}
-
 		var min = Math.ceil(0);
 		var max = Math.floor(Object.keys(json_sort).length);
 		var resultado =  Math.floor(Math.random() * (max - min)) + min;
 		
 		var retorno = {};
-		if(json_sort[resultado].id == id_a){
+		console.log({vencedor:json_sort[resultado].id});
+		if(json_sort[resultado].id == pokemon_a.id){
 			pokemon_a.nivel = pokemon_a.nivel + 1;
 			pokemon_b.nivel = pokemon_b.nivel - 1;
 			retorno.vencedor = pokemon_a;
 			retorno.perdedor = pokemon_b;
 			models.pokemons.update(
 			    {nivel:pokemon_a.nivel},
-				{ where: { id: id_a } }).then(function(result){});
+				{ where: { id: pokemon_a.id } }).then(function(result){});
 			if(pokemon_b.nivel < 1){
 				models.pokemons.destroy({
 				where: {
-					id:id_b
+					id:pokemon_b.id
 				}}).then(function(result){});
 			}else{
 				models.pokemons.update(
@@ -72,16 +69,16 @@ router.post('/batalhar/:pokemonAid/:pokemonBid',function(req, res){
 			retorno.perdedor = pokemon_a;
 			models.pokemons.update(
 			    {nivel:pokemon_b.nivel},
-				{ where: { id: id_b } }).then(function(result){});
+				{ where: { id: pokemon_b.id } }).then(function(result){});
 			if(pokemon_a.nivel < 1){
 				models.pokemons.destroy({
 				where: {
-					id:id_a
+					id:pokemon_a.id
 				}}).then(function(result){});
 			}else{
 				models.pokemons.update(
 			    {nivel:pokemon_a.nivel},
-				{ where: { id: id_a } }).then(function(result){});
+				{ where: { id: pokemon_a.id } }).then(function(result){});
 			}
 		}
 		return res.status(200).json(retorno);
